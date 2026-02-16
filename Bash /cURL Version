@@ -1,0 +1,17 @@
+API_TOKEN="YOUR_API_TOKEN"
+
+ZONES=(
+  "zoneid_app1"
+  "zoneid_app2"
+  "zoneid_app3"
+)
+
+for ZONE in "${ZONES[@]}"; do
+  echo "==== ZONE: $ZONE ===="
+
+  curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records" \
+      -H "Authorization: Bearer $API_TOKEN" \
+      -H "Content-Type: application/json"
+  
+  echo ""
+done
