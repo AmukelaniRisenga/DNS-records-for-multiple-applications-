@@ -1,0 +1,30 @@
+import requests
+
+API_TOKEN = "YOUR_API_TOKEN"
+
+# List of Cloudflare Zone IDs (each representing an application)
+ZONES = [
+    "zoneid_app1",
+    "zoneid_app2",
+    "zoneid_app3"
+]
+
+headers = {
+    "Authorization": f"Bearer {API_TOKEN}",
+    "Content-Type": "application/json"
+}
+
+def get_dns_records(zone_id):
+    url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+for zone in ZONES:
+    print(f"\n=== DNS Records for Zone: {zone} ===")
+    result = get_dns_records(zone)
+
+    if result.get("success"):
+        for record in result["result"]:
+            print(f"{record['type']}  {record['name']} → {record['content']}")
+    else:
+        print("Error:", result.get("errors"))
